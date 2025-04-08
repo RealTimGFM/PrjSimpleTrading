@@ -10,17 +10,12 @@ import jakarta.servlet.annotation.*;
 
 @WebServlet("/stonks")
 public class StockServlet extends HttpServlet {
-    private String message;
-
-    public void init() {
-        message = "Hello World!";
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Access the strongly-typed CSV data from the servlet context
+        // Access CSV data from servlet context
         @SuppressWarnings("unchecked")
         Map<String, List<StockDataset>> allCsvData =
                 (Map<String, List<StockDataset>>) getServletContext().getAttribute("allCsvData");
