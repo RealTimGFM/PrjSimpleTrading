@@ -47,8 +47,8 @@ public class StockDataset {
     public double getClose() {return close;}
     public void setClose(double close) {this.close = close;}
 
-    public double getAdj_close() {return adj_close;}
-    public void setAdj_close(double adj_close) {this.adj_close = adj_close;}
+    public double getAdjClose() {return adj_close;}
+    public void setAdjClose(double adj_close) {this.adj_close = adj_close;}
 
     public double getOpen() {return open;}
     public void setOpen(double open) {this.open = open;}

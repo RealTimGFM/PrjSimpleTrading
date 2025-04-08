@@ -8,7 +8,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.*;
 
-@WebServlet("/stock-servlet")
+@WebServlet("/stonks")
 public class StockServlet extends HttpServlet {
     private String message;
 
@@ -22,10 +22,10 @@ public class StockServlet extends HttpServlet {
 
         // Access the strongly-typed CSV data from the servlet context
         @SuppressWarnings("unchecked")
-        List<StockDataset> StockDatasets =
-                (List<StockDataset>) getServletContext().getAttribute("allCsvData");
+        Map<String, List<StockDataset>> allCsvData =
+                (Map<String, List<StockDataset>>) getServletContext().getAttribute("allCsvData");
 
-        if (StockDatasets == null) {
+        if (allCsvData == null) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     "CSV data not available");
             return;
@@ -33,6 +33,9 @@ public class StockServlet extends HttpServlet {
 
         //token
         HttpSession session = request.getSession();
+
+        request.setAttribute("allCsvData", allCsvData);
+        request.getRequestDispatcher("/WEB-INF/views/displayStocks.jsp").forward(request, response);
 
     }
 
