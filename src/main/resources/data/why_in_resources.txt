@@ -1,0 +1,2 @@
+makes the csv files accessible in development and in production
+also makes sure that jakarta can read the contents of the .csv files
