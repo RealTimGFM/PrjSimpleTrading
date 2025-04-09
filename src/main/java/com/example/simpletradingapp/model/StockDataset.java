@@ -4,7 +4,7 @@ import java.util.*;
 //Class for .csv Dataset
 public class StockDataset {
     //Fields
-    private String id;
+    private String symbol;
     private String name;
     private Date date;
     private double open;
@@ -15,8 +15,8 @@ public class StockDataset {
     private int volume;
 
     //Constructor
-    public StockDataset(String id, String name, Date date, double open, double high, double low, double close, double adjClose, int volume) {
-        this.id = id;
+    public StockDataset(String symbol, String name, Date date, double open, double high, double low, double close, double adjClose, int volume) {
+        this.symbol = symbol;
         this.name = name;
         this.date = date;
         this.high = high;
@@ -29,8 +29,8 @@ public class StockDataset {
 
 
     //getters and setters
-    public String getId() {return id;}
-    public void setId(String id) {this.id = id;}
+    public String getSymbol() {return symbol;}
+    public void setSymbol(String symbol) {this.symbol = symbol;}
 
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
@@ -59,7 +59,7 @@ public class StockDataset {
     //display information about this class
     @Override
     public String toString() {
-        return "CsvInfo{" + "id: " + this.id + ", name: " + this.name + ", date: " + this.date + ", high: " + this.high + ", low: " + this.low + ", close: " + this.close;
+        return "CsvInfo{" + "id: " + this.symbol + ", name: " + this.name + ", date: " + this.date + ", high: " + this.high + ", low: " + this.low + ", close: " + this.close;
     }
 }
 
