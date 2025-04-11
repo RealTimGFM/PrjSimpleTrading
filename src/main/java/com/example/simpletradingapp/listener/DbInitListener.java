@@ -77,14 +77,14 @@ public class DbInitListener implements ServletContextListener {
 
                 // Split csv into columns
                 String[] columns = line.split(",");
+                String dateString = columns[0].trim();
 
                 // Ensure there are enough columns
                 if (columns.length >= 7) {
                     try {
-                        // Proceed to parse and create StockDataset
-                        String dateString = columns[0].trim();
                         Date date = format.parse(dateString);  // Parse the date
-
+                        Date limit = format.parse("2015-01-01");
+                        // Proceed to parse and create StockDataset
                         StockDataset record = new StockDataset(
                                 fileName,
                                 companyName,

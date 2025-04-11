@@ -31,7 +31,6 @@ public class StockServlet extends HttpServlet {
 
         request.setAttribute("allCsvData", allCsvData);
         request.getRequestDispatcher("/WEB-INF/views/displayStocks.jsp").forward(request, response);
-
     }
 
     public void destroy() {

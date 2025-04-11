@@ -38,10 +38,27 @@ public class SchemaInitializer {
                             "  symbol VARCHAR(10) UNIQUE NOT NULL, " +
                             "  company_name VARCHAR(100) NOT NULL, " +
                             "  price DECIMAL(10,2) NOT NULL, " +
-                            "  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
+                            "  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE ," +
+                            " FOREIGN KEY(symbol) " +
                             ")"
             );
             System.out.println("Stocks table created.");
+
+            stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS Dataset (" +
+                            "symbol VARCHAR(10) PRIMARY KEY, " +
+                            "name VARCHAR(100), " +
+                            "date DATE, " +
+                            "open DOUBLE, " +
+                            "high DOUBLE, " +
+                            "low DOUBLE, " +
+                            "close DOUBLE, " +
+                            "adj_close DOUBLE, " +
+                            "volume INT" +
+                            ")"
+            );
+            System.out.println("StockDataset table created.");
+
 
             // Create Stock_History table (tracks daily stock prices)
             stmt.execute(
