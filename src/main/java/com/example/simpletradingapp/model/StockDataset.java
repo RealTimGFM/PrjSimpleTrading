@@ -30,7 +30,6 @@ public class StockDataset {
         this.volume = volume;
     }
 
-
     ///getters and setters
     public String getSymbol() {return symbol;}
     public void setSymbol(String symbol) {this.symbol = symbol;}
@@ -59,6 +58,8 @@ public class StockDataset {
     public int getVolume() {return volume;}
     public void setVolume(int volume) {this.volume = volume;}
 
+    public String getStockId() {return stockId;}
+    public void setStockId(String stockId) {this.stockId = stockId;}
     /// METHODS
     private String createId(String previousId) {
         // Convert the previous ID from base-36 to a decimal number
@@ -86,7 +87,8 @@ public class StockDataset {
     //display information about this class
     @Override
     public String toString() {
-        return "CsvInfo{" + "Symbol: " + this.symbol + ", name: " + this.name + ", date: " + this.date + ", high: " + this.high + ", low: " + this.low + ", close: " + this.close;
+        return "CsvInfo{" + "Stock Id: "+ this.stockId + ", symbol: " + this.symbol + ", name: " + this.name + ", date: " + this.date + ", high: " + this.high + ", low: " + this.low + ", close: " + this.close;
     }
+
 }
 
