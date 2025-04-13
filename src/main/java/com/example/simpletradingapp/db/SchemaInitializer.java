@@ -46,7 +46,8 @@ public class SchemaInitializer {
 
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS Dataset (" +
-                            "symbol VARCHAR(10) PRIMARY KEY, " +
+                            "stockID VARCHAR(10) PRIMARY KEY," +
+                            "symbol VARCHAR(10), " +
                             "name VARCHAR(100), " +
                             "date DATE, " +
                             "open DOUBLE, " +

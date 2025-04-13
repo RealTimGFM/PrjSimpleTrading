@@ -25,7 +25,6 @@ public class StockServlet extends HttpServlet {
                     "CSV data not available");
             return;
         }
-
         //token
         HttpSession session = request.getSession();
 
