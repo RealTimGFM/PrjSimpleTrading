@@ -83,7 +83,6 @@ public class DbInitListener implements ServletContextListener {
                 if (columns.length >= 7) {
                     try {
                         Date date = format.parse(dateString);  // Parse the date
-                        Date limit = format.parse("2015-01-01");
                         // Proceed to parse and create StockDataset
                         StockDataset record = new StockDataset(
                                 fileName,
