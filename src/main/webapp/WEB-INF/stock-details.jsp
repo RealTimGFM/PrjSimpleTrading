@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Item Details - ${item.name}</title>
+    <title>Stock Details - ${stock.stockId}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,7 +23,7 @@
             max-width: 800px;
             margin: 0 auto;
         }
-        .item-details {
+        .stock-details {
             margin-top: 20px;
         }
         .detail-row {
@@ -51,41 +51,56 @@
 </head>
 <body>
 <div class="container">
-    <h1>Item Details</h1>
+    <h1>stock Details</h1>
 
-    <div class="item-details">
+    <div class="stock-details">
         <div class="detail-row">
             <div class="detail-label">ID:</div>
-            <div class="detail-value">${item.id}</div>
+            <div class="detail-value">${stock.stockId}</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Symbol:</div>
+            <div class="detail-value">${stock.category.symbol}</div>
         </div>
 
         <div class="detail-row">
             <div class="detail-label">Name:</div>
-            <div class="detail-value">${item.name}</div>
+            <div class="detail-value">${stock.category.name}</div>
         </div>
 
         <div class="detail-row">
-            <div class="detail-label">Description:</div>
-            <div class="detail-value">${item.description}</div>
+            <div class="detail-label">Date:</div>
+            <div class="detail-value">${stock.date}</div>
         </div>
 
         <div class="detail-row">
-            <div class="detail-label">Category:</div>
-            <div class="detail-value">${item.category.name}</div>
+            <div class="detail-label">Price (Close):</div>
+            <div class="detail-value">$${stock.close}</div>
         </div>
 
         <div class="detail-row">
-            <div class="detail-label">Quantity:</div>
-            <div class="detail-value">${item.quantity}</div>
+            <div class="detail-label">Open:</div>
+            <div class="detail-value">${stock.open}</div>
         </div>
 
         <div class="detail-row">
-            <div class="detail-label">Price:</div>
-            <div class="detail-value">$${item.price}</div>
+            <div class="detail-label">High:</div>
+            <div class="detail-value">${stock.high}</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Low:</div>
+            <div class="detail-value">${stock.low}</div>
+        </div>
+
+        <div class="detail-row">
+            <div class="detail-label">Volume:</div>
+            <div class="detail-value">${stock.volume}</div>
         </div>
     </div>
 
-    <a href="${pageContext.request.contextPath}/inventory" class="back-link">← Back to Inventory List</a>
+    <a href="${pageContext.request.contextPath}/stonks" class="back-link">← Back to Company List</a>
 </div>
 </body>
 </html>

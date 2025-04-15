@@ -1,4 +1,5 @@
 package com.example.simpletradingapp.DAO;
+import com.example.simpletradingapp.model.Category;
 import com.example.simpletradingapp.model.StockDataset;
 import java.util.*;
 
@@ -22,5 +23,5 @@ public interface DatasetDAO {
      * @param date in the stock code
      * @return the close stock (StockDataset) or null if not found
      */
-    StockDataset findCloseByDate(Date date, String symbol);
+    StockDataset findCloseByDate(Date date, Category category);
 }

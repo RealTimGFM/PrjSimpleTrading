@@ -1,33 +1,32 @@
 package com.example.simpletradingapp.model;
 
 public class Category {
-    private String stockId;
     private String symbol;
+    private String name;
 
     // Basic constructor
     public Category() {
     }
 
     // Constructor with fields
-    public Category(String stockId, String symbol) {
-        this.stockId = stockId;
+    public Category(String symbol, String name) {
         this.symbol = symbol;
+        this.name = name;
     }
 
     // Getters and Setters
-    public String getstockId() {
-        return this.stockId;
+    public String getName() {
+        return this.name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setstockId(String stockId) {
-        this.stockId = stockId;
-    }
-
-    public String getsymbol() {
+    public String getSymbol() {
         return symbol;
     }
 
-    public void setsymbol(String symbol) {
+    public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.simpletradingapp.DAO.implement;
 import com.example.simpletradingapp.DAO.DatasetDAO;
 import com.example.simpletradingapp.db.DbUtil;
+import com.example.simpletradingapp.model.Category;
 import com.example.simpletradingapp.model.StockDataset;
 
 import java.sql.*;
@@ -20,7 +21,6 @@ public class DatasetDAOImpl implements DatasetDAO {
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                String name = rs.getString("name");
                 Date date = rs.getDate("date");
                 double open = rs.getDouble("open");
                 double high = rs.getDouble("high");
@@ -28,7 +28,8 @@ public class DatasetDAOImpl implements DatasetDAO {
                 double close = rs.getDouble("close");
                 double adjClose = rs.getDouble("adj_close");
                 int volume = rs.getInt("volume");
-                StockDataset dataset = new StockDataset(symbl, name, date, open, high, low, close, adjClose, volume);
+                Category cat = rs.getObject("category", Category.class);
+                StockDataset dataset = new StockDataset(date, open, high, low, close, adjClose, volume, cat);
                 outputSymb.add(dataset);
                 return outputSymb;
             }
@@ -53,16 +54,14 @@ public class DatasetDAOImpl implements DatasetDAO {
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                String symbol = rs.getString("symbol");
-                String name = rs.getString("name");
                 double open = rs.getDouble("open");
                 double high = rs.getDouble("high");
                 double low = rs.getDouble("low");
                 double close = rs.getDouble("close");
                 double adjClose = rs.getDouble("adj_close");
                 int volume = rs.getInt("volume");
-
-                StockDataset dataset = new StockDataset(symbol, name, date, open, high, low, close, adjClose, volume);
+                Category cat = rs.getObject("category", Category.class);
+                StockDataset dataset = new StockDataset(date, open, high, low, close, adjClose, volume, cat);
                 results.add(dataset);
             }
             return results;
@@ -73,7 +72,7 @@ public class DatasetDAOImpl implements DatasetDAO {
             DbUtil.closeQuietly(conn);
         }
     }
-    public StockDataset findCloseByDate(Date date, String symbol) {
+    public StockDataset findCloseByDate(Date date, Category cat) {
         Connection conn = null;
         try {
             conn = DbUtil.getConnection();
@@ -81,18 +80,17 @@ public class DatasetDAOImpl implements DatasetDAO {
                     "SELECT * FROM Dataset WHERE date = ? AND symbol = ?"
             );
             stmt.setDate(1, (java.sql.Date) date);
-            stmt.setString(2, symbol);
+            stmt.setString(2, cat.getSymbol());
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                String name = rs.getString("name");
                 double open = rs.getDouble("open");
                 double high = rs.getDouble("high");
                 double low = rs.getDouble("low");
                 double close = rs.getDouble("close");
                 double adjClose = rs.getDouble("adj_close");
                 int volume = rs.getInt("volume");
-                return new StockDataset(symbol, name, date, open, high, low, close, adjClose, volume);
+                StockDataset dataset = new StockDataset(date, open, high, low, close, adjClose, volume, cat);
             }
             return null;
         } catch (SQLException e) {

@@ -8,19 +8,19 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import com.example.simpletradingapp.model.InventoryManager;
-import com.example.simpletradingapp.model.InventoryItem;
+import com.example.simpletradingapp.model.StockManager;
+import com.example.simpletradingapp.model.StockDataset;
 
-@WebServlet("/company")
+@WebServlet("/stonks")
 public class CompanyServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private InventoryManager manager;
+    private StockManager manager;
 
     @Override
     public void init() throws ServletException {
         // Initialize the inventory manager with sample data
-        manager = new InventoryManager();
+        manager = new StockManager();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CompanyServlet extends HttpServlet {
         // Route to the appropriate action
         switch (action) {
             case "view":
-                viewItem(request, response);
+                viewStock(request, response);
                 break;
             case "category":
                 listByCategory(request, response);
@@ -50,31 +50,30 @@ public class CompanyServlet extends HttpServlet {
 
     private void listInventory(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Set the items list as an attribute
-        request.setAttribute("items", manager.getAllItems());
+        // Set the stocks list as an attribute
+        request.setAttribute("stocks", manager.getAllStockDatasets());
         request.setAttribute("categories", manager.getAllCategories());
 
         // Forward to the inventory list JSP
-        request.getRequestDispatcher("/WEB-INF/inventory-list.jsp")
+        request.getRequestDispatcher("/WEB-INF/company-list.jsp")
                 .forward(request, response);
     }
 
-    private void viewItem(HttpServletRequest request, HttpServletResponse response)
+    private void viewStock(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Get the item ID
+        // Get the stock ID
         String idParam = request.getParameter("id");
 
         if (idParam != null && !idParam.isEmpty()) {
             try {
-                Long itemId = Long.parseLong(idParam);
-                InventoryItem item = manager.getItemById(itemId);
+                StockDataset stock = manager.getStockById(idParam);
 
-                if (item != null) {
-                    // Set the item as an attribute
-                    request.setAttribute("item", item);
+                if (stock != null) {
+                    // Set the stock as an attribute
+                    request.setAttribute("stock", stock);
 
-                    // Forward to the item detail JSP
-                    request.getRequestDispatcher("/WEB-INF/item-detail.jsp")
+                    // Forward to the stock detail JSP
+                    request.getRequestDispatcher("/WEB-INF/stock-details.jsp")
                             .forward(request, response);
                     return;
                 }
@@ -83,26 +82,25 @@ public class CompanyServlet extends HttpServlet {
             }
         }
 
-        // If we get here, the item wasn't found or ID was invalid
-        response.sendRedirect(request.getContextPath() + "/inventory");
+        // If we get here, the stock wasn't found or ID was invalid
+        response.sendRedirect(request.getContextPath() + "/stonks");
     }
 
     private void listByCategory(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Get the category ID
-        String categoryIdParam = request.getParameter("id");
+        String categoryIdParam = request.getParameter("symbol");
 
         if (categoryIdParam != null && !categoryIdParam.isEmpty()) {
             try {
-                Long categoryId = Long.parseLong(categoryIdParam);
 
-                // Set the filtered items as an attribute
-                request.setAttribute("items", manager.getItemsByCategory(categoryId));
+                // Set the filtered stocks as an attribute
+                request.setAttribute("stocks", manager.getStocksByCategory(categoryIdParam));
                 request.setAttribute("categories", manager.getAllCategories());
-                request.setAttribute("selectedCategoryId", categoryId);
+                request.setAttribute("selectedCategoryId", categoryIdParam);
 
                 // Forward to the inventory list JSP
-                request.getRequestDispatcher("/WEB-INF/inventory-list.jsp")
+                request.getRequestDispatcher("/WEB-INF/company-list.jsp")
                         .forward(request, response);
                 return;
             } catch (NumberFormatException e) {
@@ -111,6 +109,6 @@ public class CompanyServlet extends HttpServlet {
         }
 
         // If we get here, the category wasn't found or ID was invalid
-        response.sendRedirect(request.getContextPath() + "/inventory");
+        response.sendRedirect(request.getContextPath() + "/stonks");
     }
 }
