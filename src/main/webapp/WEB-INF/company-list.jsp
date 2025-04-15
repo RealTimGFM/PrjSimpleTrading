@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -78,13 +79,13 @@
         </c:forEach>
     </div>
 
-    <!-- Inventory table -->
+    <!-- Stocks table -->
     <table>
         <thead>
         <tr>
             <th>ID</th>
-            <th>Name</th>
-            <th>Category</th>
+            <th>Date</th>
+            <th>Company</th>
             <th>Price</th>
             <th>Actions</th>
         </tr>
@@ -102,7 +103,7 @@
                         <td>${item.stockId}</td>
                         <td>${item.date}</td>
                         <td>${item.category.name}</td>
-                        <td>$${item.close}</td>
+                        <td>$<fmt:formatNumber value="${item.close}" minFractionDigits="2" maxFractionDigits="2" /></td>
                         <td>
                             <a href="${pageContext.request.contextPath}/stonks?action=view&id=${item.stockId}"
                                class="view-link">View Details</a>

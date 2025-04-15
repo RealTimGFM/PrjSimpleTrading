@@ -60,6 +60,11 @@
         </div>
 
         <div class="detail-row">
+            <div class="detail-label">Symbol:</div>
+            <div class="detail-value">${stock.category.symbol}</div>
+        </div>
+
+        <div class="detail-row">
             <div class="detail-label">Name:</div>
             <div class="detail-value">${stock.category.name}</div>
         </div>

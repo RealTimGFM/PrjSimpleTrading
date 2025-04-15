@@ -31,19 +31,7 @@ public class SchemaInitializer {
             );
             System.out.println("Users table created.");
 
-            // Create Stocks table (stores latest price)
-            stmt.execute(
-                    "CREATE TABLE IF NOT EXISTS Stocks (" +
-                            "  stock_id INT AUTO_INCREMENT PRIMARY KEY, " +
-                            "  symbol VARCHAR(10) UNIQUE NOT NULL, " +
-                            "  company_name VARCHAR(100) NOT NULL, " +
-                            "  price DECIMAL(10,2) NOT NULL, " +
-                            "  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE ," +
-                            " FOREIGN KEY(symbol) " +
-                            ")"
-            );
-            System.out.println("Stocks table created.");
-
+            //Holds all of stock's dataset
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS StockDataset (" +
                             "stockID VARCHAR(10) PRIMARY KEY," +
@@ -67,17 +55,6 @@ public class SchemaInitializer {
                             ")"
             );
             System.out.println("StockCategory table created.");
-            // Create Stock_History table (tracks daily stock prices)
-            stmt.execute(
-                    "CREATE TABLE IF NOT EXISTS Stock_History (" +
-                            "  history_id INT AUTO_INCREMENT PRIMARY KEY, " +
-                            "  stock_id INT NOT NULL, " +
-                            "  recorded_date DATE NOT NULL DEFAULT CURRENT_DATE, " +
-                            "  price DECIMAL(10,2) NOT NULL, " +
-                            "  FOREIGN KEY (stock_id) REFERENCES Stocks(stock_id) ON DELETE CASCADE" +
-                            ")"
-            );
-            System.out.println("Stock_History table created.");
 
             // Create User_Stock table (tracks user purchases)
             stmt.execute(

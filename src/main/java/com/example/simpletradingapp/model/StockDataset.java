@@ -2,9 +2,10 @@ package com.example.simpletradingapp.model;
 
 import java.sql.Timestamp;
 import java.util.*;
-//Class for .csv Dataset
+
+//Class for .csv Dataset in /resources
 public class StockDataset {
-    ///Fields
+    ///FIELDS
     private String stockId;
     private Date date;
     private double open;
@@ -15,12 +16,13 @@ public class StockDataset {
     private int volume;
     private static String lastId = "000000";
     private Category category;
-    ///Constructor
+
+    ///CONSTRUCTOR
     //basic constructor
     public StockDataset() {}
     //constructor with fields
     public StockDataset(Date date, double open, double high, double low, double close, double adjClose, int volume, Category category) {
-        this.stockId = createId(lastId);
+        this.stockId = createId();
         this.date = date;
         this.high = high;
         this.low = low;
@@ -31,10 +33,9 @@ public class StockDataset {
         this.category = category;
     }
 
-    ///getters and setters
-
+    ///PROPERTIES : getters and setters
     public Date getDate() {return date;}
-    public void setDate(Date date) {this.date = date;}
+//    public void setDate(Date date) {this.date = date;}
 
     public double getHigh() {return high;}
     public void setHigh(double high) {this.high = high;}
@@ -61,16 +62,18 @@ public class StockDataset {
     public void setCategory(Category category) {
         this.category = category;
     }
+
     /// METHODS
-    private String createId(String previousId) {
-        // Convert the previous ID from base-36 to a decimal number
+    ///
+    private String createId() {
+        // Convert the lasId from base-36 to a decimal number
         long decimalValue = Long.parseLong(lastId, 36);
         decimalValue++;
 
-        // Convert decimal value back to base-36 + Uppercase
+        // unconvert decimalValue + toUpper() letters
         String newId = Long.toString(decimalValue, 36).toUpperCase();
         // Pad with leading zeros to ensure it's always 6 characters
-        lastId = String.format("%6s", newId).replace(' ', '0');
+        lastId = String.format("%3s", newId).replace(' ', '0');
         return lastId;
     }
     // Admin updates stock history (for testing)

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class User {
+    /// FIELDS
     private int userId;
     private String username;
     private String email;
@@ -11,6 +12,7 @@ public class User {
     private double balance;
     private Map<String, Integer> portfolio; // Stock ID -> Quantity Owned
 
+    /// CONSTRUCTOR
     public User(int userId, String username, String email, String passwordHash, double balance) {
         this.userId = userId;
         this.username = username;
@@ -20,6 +22,18 @@ public class User {
         this.portfolio = new HashMap<>();
     }
 
+    /// PROPERTIES: Getters and Setters
+    public int getUserId() { return userId; }
+    public String getUsername() { return username; }
+    public String getEmail() { return email; }
+    public double getBalance() { return balance; }
+
+    /// METHODS
+    ///
+    // Check balance
+    public double checkBalance() {
+        return balance;
+    }
     // Buy stocks
     public boolean buyStock(StockDataset stock, int quantity) {
         double totalCost = stock.getClose() * quantity;
@@ -47,15 +61,4 @@ public class User {
             return false;
         }
     }
-
-    // Check balance
-    public double checkBalance() {
-        return balance;
-    }
-
-    // Getters and Setters
-    public int getUserId() { return userId; }
-    public String getUsername() { return username; }
-    public String getEmail() { return email; }
-    public double getBalance() { return balance; }
 }
