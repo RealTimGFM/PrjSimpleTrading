@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Inventory Management</title>
+    <title>Stock Management</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -69,12 +69,12 @@
     <!-- Category filter -->
     <div class="category-filter">
         <strong>Filter by Category:</strong>
-        <a href="${pageContext.request.contextPath}/inventory"
-           class="${empty selectedCategoryId ? 'selected' : ''}">All Items</a>
+        <a href="${pageContext.request.contextPath}/stonks"
+           class="${empty selectedCategoryId ? 'selected' : ''}">All Stocks</a>
 
         <c:forEach var="category" items="${categories}">
-            <a href="${pageContext.request.contextPath}/inventory?action=category&id=${category.id}"
-               class="${selectedCategoryId == category.id ? 'selected' : ''}">${category.name}</a>
+            <a href="${pageContext.request.contextPath}/stonks?action=category&symbol=${category.symbol}"
+               class="${selectedCategoryId == category.symbol ? 'selected' : ''}">${category.symbol}</a>
         </c:forEach>
     </div>
 
@@ -94,19 +94,19 @@
         <c:choose>
             <c:when test="${empty items}">
                 <tr>
-                    <td colspan="6">No items found</td>
+                    <td colspan="6">No stocks found</td>
                 </tr>
             </c:when>
             <c:otherwise>
                 <c:forEach var="item" items="${items}">
                     <tr>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.category.name}</td>
-                        <td>${item.quantity}</td>
-                        <td>$${item.price}</td>
+                        <td>${items.id}</td>
+                        <td>${items.date}</td>
+                        <td>${items.category.name}</td>
+                        <td>${items.volume}</td>
+                        <td>$${items.price}</td>
                         <td>
-                            <a href="${pageContext.request.contextPath}/inventory?action=view&id=${item.id}"
+                            <a href="${pageContext.request.contextPath}/stonks?action=view&id=${items.id}"
                                class="view-link">View Details</a>
                         </td>
                     </tr>

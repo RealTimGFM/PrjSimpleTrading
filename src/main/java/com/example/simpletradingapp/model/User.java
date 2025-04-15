@@ -9,7 +9,7 @@ public class User {
     private String email;
     private String passwordHash;
     private double balance;
-    private Map<Integer, Integer> portfolio; // Stock ID -> Quantity Owned
+    private Map<String, Integer> portfolio; // Stock ID -> Quantity Owned
 
     public User(int userId, String username, String email, String passwordHash, double balance) {
         this.userId = userId;
@@ -21,12 +21,12 @@ public class User {
     }
 
     // Buy stocks
-    public boolean buyStock(Stock stock, int quantity) {
-        double totalCost = stock.getPrice() * quantity;
+    public boolean buyStock(StockDataset stock, int quantity) {
+        double totalCost = stock.getClose() * quantity;
         if (balance >= totalCost) {
             balance -= totalCost;
             portfolio.put(stock.getStockId(), portfolio.getOrDefault(stock.getStockId(), 0) + quantity);
-            System.out.println(username + " bought " + quantity + " shares of " + stock.getSymbol());
+            System.out.println(username + " bought " + quantity + " shares of " + stock.getCategory().getSymbol());
             return true;
         } else {
             System.out.println("Insufficient funds!");
@@ -35,12 +35,12 @@ public class User {
     }
 
     // Sell stocks
-    public boolean sellStock(Stock stock, int quantity) {
+    public boolean sellStock(StockDataset stock, int quantity) {
         if (portfolio.getOrDefault(stock.getStockId(), 0) >= quantity) {
-            double totalSale = stock.getPrice() * quantity;
+            double totalSale = stock.getClose() * quantity;
             balance += totalSale;
             portfolio.put(stock.getStockId(), portfolio.get(stock.getStockId()) - quantity);
-            System.out.println(username + " sold " + quantity + " shares of " + stock.getSymbol());
+            System.out.println(username + " sold " + quantity + " shares of " + stock.getCategory().getSymbol());
             return true;
         } else {
             System.out.println("Not enough shares to sell!");

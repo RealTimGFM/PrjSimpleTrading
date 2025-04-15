@@ -45,10 +45,9 @@ public class SchemaInitializer {
             System.out.println("Stocks table created.");
 
             stmt.execute(
-                    "CREATE TABLE IF NOT EXISTS Dataset (" +
+                    "CREATE TABLE IF NOT EXISTS StockDataset (" +
                             "stockID VARCHAR(10) PRIMARY KEY," +
                             "symbol VARCHAR(10), " +
-                            "name VARCHAR(100), " +
                             "date DATE, " +
                             "open DOUBLE, " +
                             "high DOUBLE, " +
@@ -56,11 +55,18 @@ public class SchemaInitializer {
                             "close DOUBLE, " +
                             "adj_close DOUBLE, " +
                             "volume INT" +
+                            "FOREIGN KEY (symbol) REFERENCES StockInfo(symbol)" +
                             ")"
             );
             System.out.println("StockDataset table created.");
 
-
+            stmt.execute(
+                    "CREATE TABLE IF NOT EXISTS StockCategory (" +
+                            "symbol VARCHAR(10) PRIMARY KEY, " +
+                            "name VARCHAR(100)" +
+                            ")"
+            );
+            System.out.println("StockCategory table created.");
             // Create Stock_History table (tracks daily stock prices)
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS Stock_History (" +
@@ -98,7 +104,6 @@ public class SchemaInitializer {
             DbUtil.closeQuietly(conn);
         }
     }
-
     public static void main(String[] args) {
         initializeSchema(); // Run this to initialize DB schema
     }
