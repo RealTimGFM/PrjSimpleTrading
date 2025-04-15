@@ -85,28 +85,26 @@
             <th>ID</th>
             <th>Name</th>
             <th>Category</th>
-            <th>Quantity</th>
             <th>Price</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         <c:choose>
-            <c:when test="${empty items}">
+            <c:when test="${empty stocks}">
                 <tr>
                     <td colspan="6">No stocks found</td>
                 </tr>
             </c:when>
             <c:otherwise>
-                <c:forEach var="item" items="${items}">
+                <c:forEach var="item" items="${stocks}">
                     <tr>
-                        <td>${items.id}</td>
-                        <td>${items.date}</td>
-                        <td>${items.category.name}</td>
-                        <td>${items.volume}</td>
-                        <td>$${items.price}</td>
+                        <td>${item.stockId}</td>
+                        <td>${item.date}</td>
+                        <td>${item.category.name}</td>
+                        <td>$${item.close}</td>
                         <td>
-                            <a href="${pageContext.request.contextPath}/stonks?action=view&id=${items.id}"
+                            <a href="${pageContext.request.contextPath}/stonks?action=view&id=${item.stockId}"
                                class="view-link">View Details</a>
                         </td>
                     </tr>
