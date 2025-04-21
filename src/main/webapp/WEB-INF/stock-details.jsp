@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,9 +13,6 @@
             padding: 20px;
             background-color: #f5f5f5;
         }
-        h1, h2 {
-            color: #333;
-        }
         .container {
             background-color: white;
             border-radius: 5px;
@@ -22,6 +20,9 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             max-width: 800px;
             margin: 0 auto;
+        }
+        h1 {
+            color: #333;
         }
         .stock-details {
             margin-top: 20px;
@@ -51,56 +52,62 @@
 </head>
 <body>
 <div class="container">
-    <h1>stock Details</h1>
+    <h1>Stock Details</h1>
 
-    <div class="stock-details">
-        <div class="detail-row">
-            <div class="detail-label">ID:</div>
-            <div class="detail-value">${stock.stockId}</div>
+    <c:if test="${not empty stock}">
+        <div class="stock-details">
+            <div class="detail-row">
+                <div class="detail-label">ID:</div>
+                <div class="detail-value">${stock.stockId}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Symbol:</div>
+                <div class="detail-value">${stock.category.symbol}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Name:</div>
+                <div class="detail-value">${stock.category.name}</div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Date:</div>
+                <div class="detail-value"><fmt:formatDate value="${stock.date}" pattern="yyyy-MM-dd" /></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Price (Close):</div>
+                <div class="detail-value">$<fmt:formatNumber value="${stock.close}" minFractionDigits="2"/></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Open:</div>
+                <div class="detail-value">$<fmt:formatNumber value="${stock.open}" minFractionDigits="2"/></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">High:</div>
+                <div class="detail-value">$<fmt:formatNumber value="${stock.high}" minFractionDigits="2"/></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Low:</div>
+                <div class="detail-value">$<fmt:formatNumber value="${stock.low}" minFractionDigits="2"/></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Volume:</div>
+                <div class="detail-value">${stock.volume}</div>
+            </div>
         </div>
+    </c:if>
 
-        <div class="detail-row">
-            <div class="detail-label">Symbol:</div>
-            <div class="detail-value">${stock.category.symbol}</div>
-        </div>
+    <c:if test="${empty stock}">
+        <p>No stock data found.</p>
+    </c:if>
 
-        <div class="detail-row">
-            <div class="detail-label">Name:</div>
-            <div class="detail-value">${stock.category.name}</div>
-        </div>
-
-        <div class="detail-row">
-            <div class="detail-label">Date:</div>
-            <div class="detail-value">${stock.date}</div>
-        </div>
-
-        <div class="detail-row">
-            <div class="detail-label">Price (Close):</div>
-            <div class="detail-value">$${stock.close}</div>
-        </div>
-
-        <div class="detail-row">
-            <div class="detail-label">Open:</div>
-            <div class="detail-value">${stock.open}</div>
-        </div>
-
-        <div class="detail-row">
-            <div class="detail-label">High:</div>
-            <div class="detail-value">${stock.high}</div>
-        </div>
-
-        <div class="detail-row">
-            <div class="detail-label">Low:</div>
-            <div class="detail-value">${stock.low}</div>
-        </div>
-
-        <div class="detail-row">
-            <div class="detail-label">Volume:</div>
-            <div class="detail-value">${stock.volume}</div>
-        </div>
-    </div>
-
-    <a href="${pageContext.request.contextPath}/stonks" class="back-link">← Back to Company List</a>
+    <a class="back-link" href="${pageContext.request.contextPath}/company-list">← Back to Company List</a>
 </div>
 </body>
 </html>

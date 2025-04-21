@@ -60,19 +60,20 @@ public class SchemaInitializer {
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS User_Stock (" +
                             "  user_id INT NOT NULL, " +
-                            "  stock_id INT NOT NULL, " +
+                            "  stock_id VARCHAR(10) NOT NULL, " +
                             "  quantity INT NOT NULL, " +
                             "  avg_buy_price DECIMAL(10,2) NOT NULL, " +
                             "  total_value DECIMAL(10,2) NOT NULL, " +
                             "  purchase_date DATE NOT NULL DEFAULT CURRENT_DATE, " +
                             "  PRIMARY KEY (user_id, stock_id, purchase_date), " +
                             "  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE, " +
-                            "  FOREIGN KEY (stock_id) REFERENCES Stocks(stock_id) ON DELETE CASCADE" +
+                            "  FOREIGN KEY (stock_id) REFERENCES StockDataset(stockID) ON DELETE CASCADE" +
                             ")"
             );
             System.out.println("User_Stock table created.");
 
-            System.out.println("✅ Database schema setup complete!");
+
+            System.out.println("Database schema setup complete!");
 
         } catch (SQLException e) {
             System.err.println("Error setting up database: " + e.getMessage());
@@ -82,6 +83,6 @@ public class SchemaInitializer {
         }
     }
     public static void main(String[] args) {
-        initializeSchema(); // Run this to initialize DB schema
+        initializeSchema();
     }
 }

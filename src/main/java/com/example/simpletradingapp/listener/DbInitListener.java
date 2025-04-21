@@ -2,6 +2,7 @@ package com.example.simpletradingapp.listener;
 
 import com.example.simpletradingapp.db.SchemaInitializer;
 import com.example.simpletradingapp.model.StockDataset;
+import com.example.simpletradingapp.model.StockManager;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
@@ -19,9 +20,9 @@ public class DbInitListener implements ServletContextListener {
 
         SchemaInitializer.initializeSchema();
         System.out.println("Stock Database Initialized!...");
-
+        StockManager manager = new StockManager();
+        manager.saveAllToDatabase();
     }
-
 
 
     @Override

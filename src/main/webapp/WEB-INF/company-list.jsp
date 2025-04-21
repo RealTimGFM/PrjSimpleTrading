@@ -66,19 +66,6 @@
 <body>
 <div class="container">
     <h1>Inventory Management</h1>
-
-    <!-- Category filter -->
-    <div class="category-filter">
-        <strong>Filter by Category:</strong>
-        <a href="${pageContext.request.contextPath}/stonks"
-           class="${empty selectedCategoryId ? 'selected' : ''}">All Stocks</a>
-
-        <c:forEach var="category" items="${categories}">
-            <a href="${pageContext.request.contextPath}/stonks?action=category&symbol=${category.symbol}"
-               class="${selectedCategoryId == category.symbol ? 'selected' : ''}">${category.symbol}</a>
-        </c:forEach>
-    </div>
-
     <!-- Stocks table -->
     <table>
         <thead>
@@ -100,12 +87,12 @@
             <c:otherwise>
                 <c:forEach var="item" items="${stocks}">
                     <tr>
-                        <td>${item.stockId}</td>
+                        <td>${item.category.symbol} <small style="color:gray;">(${item.stockId})</small></td>
                         <td>${item.date}</td>
                         <td>${item.category.name}</td>
                         <td>$<fmt:formatNumber value="${item.close}" minFractionDigits="2" maxFractionDigits="2" /></td>
                         <td>
-                            <a href="${pageContext.request.contextPath}/stonks?action=view&id=${item.stockId}"
+                            <a href="${pageContext.request.contextPath}/stock-detail?symbol=${item.category.symbol}"
                                class="view-link">View Details</a>
                         </td>
                     </tr>

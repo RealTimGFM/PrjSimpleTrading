@@ -25,13 +25,16 @@ public class StockDataset {
     //constructor with fields
     public StockDataset(Date date, double open, double high, double low, double close, double adjClose, int volume, Category category) {
         this.stockId = createId();
+        this.symbol = category.getSymbol();
+        this.name = category.getName();
         this.date = date;
         this.high = high;
         this.low = low;
         this.close = close;
-        adj_close = adjClose;
+        this.adj_close = adjClose;
         this.open = open;
         this.volume = volume;
+        this.category = category;
     }
 
     ///PROPERTIES : getters and setters
@@ -95,5 +98,15 @@ public class StockDataset {
         return "CsvInfo{" + "Stock Id: "+ this.stockId + ", symbol: " + category.getSymbol() + ", name: " + category.getSymbol() + ", date: " + this.date + ", high: " + this.high + ", low: " + this.low + ", close: " + this.close;
     }
 
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 }
 

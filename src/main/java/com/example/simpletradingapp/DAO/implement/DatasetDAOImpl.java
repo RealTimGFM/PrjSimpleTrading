@@ -12,15 +12,16 @@ import java.util.Date;
 public class DatasetDAOImpl implements DatasetDAO {
     @Override
     public List<StockDataset> findBySymbol(String symbl) {
-        List<StockDataset> outputSymb = new ArrayList<>();
+        List<StockDataset> result = new ArrayList<>();
         Connection conn = null;
         try {
             conn = DbUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Dataset WHERE symbol = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM StockDataset WHERE symbol = ?");
             stmt.setString(1, symbl);
-
+            System.out.println("🔎 SQL query for symbol = " + symbl);
             ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
+            while (rs.next()) {
+                System.out.println("✅ Found row with symbol = " + rs.getString("symbol"));
                 Date date = rs.getDate("date");
                 double open = rs.getDouble("open");
                 double high = rs.getDouble("high");
@@ -28,12 +29,17 @@ public class DatasetDAOImpl implements DatasetDAO {
                 double close = rs.getDouble("close");
                 double adjClose = rs.getDouble("adj_close");
                 int volume = rs.getInt("volume");
-                Category cat = rs.getObject("category", Category.class);
-                StockDataset dataset = new StockDataset(date, open, high, low, close, adjClose, volume, cat);
-                outputSymb.add(dataset);
-                return outputSymb;
+
+                String symbol = rs.getString("symbol");
+                String name = rs.getString("name");
+                Category cat = new Category(symbol, name);
+
+                StockDataset stock = new StockDataset(date, open, high, low, close, adjClose, volume, cat);
+                result.add(stock);
             }
-            return null;
+
+            return result;
+
         } catch (SQLException e) {
             System.err.println("Error finding symbol: " + e.getMessage());
             return null;
@@ -42,13 +48,14 @@ public class DatasetDAOImpl implements DatasetDAO {
         }
     }
 
+
     public List<StockDataset> findCloseByDate(Date date) {
         List<StockDataset> results = new ArrayList<>();
         Connection conn = null;
         try {
             conn = DbUtil.getConnection();
             PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT * FROM Dataset WHERE date = ?"
+                    "SELECT * FROM DataSet WHERE date = ?"
             );
             stmt.setDate(1, (java.sql.Date) date);
 
@@ -90,7 +97,7 @@ public class DatasetDAOImpl implements DatasetDAO {
                 double close = rs.getDouble("close");
                 double adjClose = rs.getDouble("adj_close");
                 int volume = rs.getInt("volume");
-                StockDataset dataset = new StockDataset(date, open, high, low, close, adjClose, volume, cat);
+                return new StockDataset(date, open, high, low, close, adjClose, volume, cat);
             }
             return null;
         } catch (SQLException e) {
