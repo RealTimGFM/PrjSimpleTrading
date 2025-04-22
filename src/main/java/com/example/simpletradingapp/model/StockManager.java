@@ -92,8 +92,6 @@ public class StockManager {
                 if (columns.length >= 7) {
                     try {
                         Date date = format.parse(columns[0].trim());
-                        // Time stone set to 2017-01-01
-                        date = format.parse("2017-01-01");
                         // Create a new StockDataset object for each line in CSV
                         StockDataset dataset = new StockDataset(
                                 date,

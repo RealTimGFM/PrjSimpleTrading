@@ -65,7 +65,18 @@
 </head>
 <body>
 <div class="container">
-    <h1>Inventory Management</h1>
+    <h1>Stock Management</h1>
+    <p>
+        Logged in as: <strong>${sessionScope.username}</strong>
+        <a href="${pageContext.request.contextPath}/logout">Logout</a>
+    </p>
+
+    <p style="font-size: 18px;">
+        Welcome, ${sessionScope.username}! |
+        💰 Balance: $<strong>${balance}</strong>
+        <a href="${pageContext.request.contextPath}/portfolio">📄 My Portfolio</a>
+    </p>
+
     <!-- Stocks table -->
     <table>
         <thead>
