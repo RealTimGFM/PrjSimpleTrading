@@ -64,8 +64,7 @@ public class SchemaInitializer {
                             "  quantity INT NOT NULL, " +
                             "  avg_buy_price DECIMAL(10,2) NOT NULL, " +
                             "  total_value DECIMAL(10,2) NOT NULL, " +
-                            "  purchase_date DATE NOT NULL DEFAULT CURRENT_DATE, " +
-                            "  PRIMARY KEY (user_id, stock_id, purchase_date), " +
+                            "  purchase_date DATE NOT NULL , " +
                             "  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE, " +
                             "  FOREIGN KEY (stock_id) REFERENCES StockDataset(stockID) ON DELETE CASCADE" +
                             ")"

@@ -1,4 +1,5 @@
 package com.example.simpletradingapp.DAO.implement;
+
 import com.example.simpletradingapp.DAO.DatasetDAO;
 import com.example.simpletradingapp.db.DbUtil;
 import com.example.simpletradingapp.model.Category;
@@ -6,10 +7,11 @@ import com.example.simpletradingapp.model.StockDataset;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 public class DatasetDAOImpl implements DatasetDAO {
+
     @Override
     public List<StockDataset> findBySymbol(String symbl) {
         List<StockDataset> result = new ArrayList<>();
@@ -21,7 +23,6 @@ public class DatasetDAOImpl implements DatasetDAO {
             System.out.println("🔎 SQL query for symbol = " + symbl);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                System.out.println("✅ Found row with symbol = " + rs.getString("symbol"));
                 Date date = rs.getDate("date");
                 double open = rs.getDouble("open");
                 double high = rs.getDouble("high");
@@ -48,60 +49,45 @@ public class DatasetDAOImpl implements DatasetDAO {
         }
     }
 
-
-    public List<StockDataset> findCloseByDate(Date date) {
-        List<StockDataset> results = new ArrayList<>();
-        Connection conn = null;
-        try {
-            conn = DbUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT * FROM DataSet WHERE date = ?"
-            );
-            stmt.setDate(1, (java.sql.Date) date);
-
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                double open = rs.getDouble("open");
-                double high = rs.getDouble("high");
-                double low = rs.getDouble("low");
-                double close = rs.getDouble("close");
-                double adjClose = rs.getDouble("adj_close");
-                int volume = rs.getInt("volume");
-                Category cat = rs.getObject("category", Category.class);
-                StockDataset dataset = new StockDataset(date, open, high, low, close, adjClose, volume, cat);
-                results.add(dataset);
-            }
-            return results;
-        } catch (SQLException e) {
-            System.err.println("Error finding close values by date: " + e.getMessage());
-            return results;
-        } finally {
-            DbUtil.closeQuietly(conn);
-        }
-    }
+    @Override
     public StockDataset findCloseByDate(Date date, Category cat) {
         Connection conn = null;
         try {
             conn = DbUtil.getConnection();
+
+            System.out.println("? SQL = SELECT * FROM StockDataset WHERE date <= " + date + " AND symbol = " + cat.getSymbol());
+
             PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT * FROM Dataset WHERE date = ? AND symbol = ?"
+                    "SELECT * FROM StockDataset " +
+                            "WHERE date <= ? AND symbol = ? " +
+                            "ORDER BY date DESC LIMIT 1"
             );
-            stmt.setDate(1, (java.sql.Date) date);
+            stmt.setDate(1, new java.sql.Date(date.getTime()));
             stmt.setString(2, cat.getSymbol());
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
+                Date realDate = rs.getDate("date");
                 double open = rs.getDouble("open");
                 double high = rs.getDouble("high");
                 double low = rs.getDouble("low");
                 double close = rs.getDouble("close");
                 double adjClose = rs.getDouble("adj_close");
                 int volume = rs.getInt("volume");
-                return new StockDataset(date, open, high, low, close, adjClose, volume, cat);
+
+                System.out.println("? Executed. Has data? true ✅");
+                String stockId = rs.getString("stockID"); // the actual one from the DB
+                StockDataset stock = new StockDataset(realDate, open, high, low, close, adjClose, volume, cat);
+                stock.setStockId(stockId); // ← THIS IS THE CRUCIAL LINE
+                return stock;
+            } else {
+                System.out.println("? Executed. Has data? false ❌");
             }
+
             return null;
+
         } catch (SQLException e) {
-            System.err.println("Error finding close by date and symbol: " + e.getMessage());
+            System.err.println("❌ Error finding close by date and symbol: " + e.getMessage());
             return null;
         } finally {
             DbUtil.closeQuietly(conn);

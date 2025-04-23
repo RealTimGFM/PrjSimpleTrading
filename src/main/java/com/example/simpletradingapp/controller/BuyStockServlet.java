@@ -31,8 +31,10 @@ public class BuyStockServlet extends HttpServlet {
         DatasetDAOImpl dao = new DatasetDAOImpl();
         Date fakeToday = DateManager.getFakeToday();
         Category cat = new Category(symbol, symbol);
-        StockDataset stock = dao.findCloseByDate(fakeToday, cat);
 
+        System.out.println("🧪 BUY DEBUG: Trying to buy " + symbol + " on date " + fakeToday);
+
+        StockDataset stock = dao.findCloseByDate(fakeToday, cat);
         if (stock == null) {
             res.getWriter().println("No price data available for this date.");
             return;
@@ -41,8 +43,13 @@ public class BuyStockServlet extends HttpServlet {
         double price = stock.getClose();
         double totalCost = price * qty;
 
-        try (Connection conn = DbUtil.getConnection()) {
-            // Check balance
+        Connection conn = null;
+
+        try {
+            conn = DbUtil.getConnection();
+            conn.setAutoCommit(false); // 🔐 Begin transaction
+
+            // ✅ Check balance
             PreparedStatement balStmt = conn.prepareStatement("SELECT balance FROM Users WHERE user_id = ?");
             balStmt.setInt(1, userId);
             ResultSet rs = balStmt.executeQuery();
@@ -51,31 +58,41 @@ public class BuyStockServlet extends HttpServlet {
                 return;
             }
 
-            // Deduct balance
+            // ✅ Deduct balance
             PreparedStatement updateBal = conn.prepareStatement("UPDATE Users SET balance = balance - ? WHERE user_id = ?");
             updateBal.setDouble(1, totalCost);
             updateBal.setInt(2, userId);
             updateBal.executeUpdate();
 
-            // Insert into User_Stock
+            // ✅ Insert into User_Stock
             PreparedStatement insert = conn.prepareStatement(
                     "INSERT INTO User_Stock (user_id, stock_id, quantity, avg_buy_price, total_value, purchase_date) " +
                             "VALUES (?, ?, ?, ?, ?, ?)"
             );
             insert.setInt(1, userId);
-            insert.setString(2, stock.getStockId());
+            insert.setString(2, stock.getStockId()); // make sure stock ID exists in StockDataset table!
             insert.setInt(3, qty);
             insert.setDouble(4, price);
             insert.setDouble(5, totalCost);
             insert.setDate(6, fakeToday);
-
             insert.executeUpdate();
 
+            conn.commit();
             res.sendRedirect("company-list");
 
         } catch (Exception e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                    System.out.println("Purchase failed. Rolling back transaction.");
+                } catch (SQLException rollbackEx) {
+                    System.err.println("Rollback failed: " + rollbackEx.getMessage());
+                }
+            }
             e.printStackTrace();
             res.getWriter().println("Error during purchase.");
+        } finally {
+            DbUtil.closeQuietly(conn);
         }
     }
 }
