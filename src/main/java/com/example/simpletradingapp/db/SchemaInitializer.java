@@ -36,6 +36,7 @@ public class SchemaInitializer {
                     "CREATE TABLE IF NOT EXISTS StockDataset (" +
                             "stockID VARCHAR(10) PRIMARY KEY," +
                             "symbol VARCHAR(10), " +
+                            "name VARCHAR(100)" +
                             "date DATE, " +
                             "open DOUBLE, " +
                             "high DOUBLE, " +
