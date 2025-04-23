@@ -93,4 +93,20 @@ public class DatasetDAOImpl implements DatasetDAO {
             DbUtil.closeQuietly(conn);
         }
     }
+    public String findSymbolByStockId(String stockId) {
+        try (Connection conn = DbUtil.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT symbol FROM StockDataset WHERE stockID = ?"
+            );
+            stmt.setString(1, stockId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("symbol");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

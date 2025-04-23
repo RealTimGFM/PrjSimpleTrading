@@ -53,14 +53,16 @@ public class SellStockServlet extends HttpServlet {
 
         try {
             conn = DbUtil.getConnection();
-            conn.setAutoCommit(false);
+            conn.setAutoCommit(false); // Begin transaction
 
-            // Get all user holdings
             List<UserStock> holdings = stockHoldingsDao.getHoldingsByUser(userId);
-            int totalOwned = holdings.stream()
-                    .filter(h -> h.getStockId().equals(stock.getStockId()))
-                    .mapToInt(UserStock::getQuantity)
-                    .sum();
+            int totalOwned = 0;
+            for (UserStock h : holdings) {
+                String heldSymbol = stockDao.findSymbolByStockId(h.getStockId());
+                if (heldSymbol.equals(symbol)) {
+                    totalOwned += h.getQuantity();
+                }
+            }
 
             if (totalOwned < qty) {
                 res.getWriter().println("You don't own enough shares to sell.");
@@ -70,12 +72,13 @@ public class SellStockServlet extends HttpServlet {
             int remainingToSell = qty;
 
             for (UserStock h : holdings) {
-                if (!h.getStockId().equals(stock.getStockId())) continue;
+                if (remainingToSell == 0) break;
+
+                String heldSymbol = stockDao.findSymbolByStockId(h.getStockId());
+                if (!heldSymbol.equals(symbol)) continue;
 
                 int lotQty = h.getQuantity();
                 Date purchaseDate = h.getPurchaseDate();
-
-                if (remainingToSell == 0) break;
 
                 if (lotQty <= remainingToSell) {
                     stockHoldingsDao.deleteHolding(userId, h.getStockId(), purchaseDate);
@@ -85,9 +88,10 @@ public class SellStockServlet extends HttpServlet {
                     remainingToSell = 0;
                 }
             }
-            double saleGain = qty * stock.getClose();
+
+            double gain = qty * stock.getClose();
             User user = userDao.getUserById(userId);
-            userDao.updateBalance(userId, user.getBalance() + saleGain);
+            userDao.updateBalance(userId, user.getBalance() + gain);
 
             conn.commit();
             res.sendRedirect("company-list");
@@ -96,6 +100,7 @@ public class SellStockServlet extends HttpServlet {
             if (conn != null) {
                 try {
                     conn.rollback();
+                    System.out.println("Sell failed. Rolled back.");
                 } catch (SQLException ex) {
                     System.err.println("Rollback error: " + ex.getMessage());
                 }
