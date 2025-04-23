@@ -27,6 +27,9 @@ public class User {
     public String getUsername() { return username; }
     public String getEmail() { return email; }
     public double getBalance() { return balance; }
+    public String getPasswordHash() {
+        return passwordHash;
+    }
 
     /// METHODS
     ///

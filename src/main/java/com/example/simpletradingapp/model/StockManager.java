@@ -125,14 +125,14 @@ public class StockManager {
     }
 
     //Find stock by ID
-    public StockDataset getStockById(String id) {
-        for (StockDataset stock : stockDatasets) {
-            if (stock.getStockId().equals(id)) {
-                return stock;
-            }
-        }
-        return null;
-    }
+    //public StockDataset getStockById(String id) {
+        //for (StockDataset stock : stockDatasets) {
+            //if (stock.getStockId().equals(id)) {
+                //return stock;
+            //}
+        //}
+        //return null;
+    //}
     //find stocks by Category
     public List<StockDataset> getStocksByCategory(String categoryId) {
         List<StockDataset> result = new ArrayList<>();
@@ -175,13 +175,13 @@ public class StockManager {
                 stmt.setDouble(8, s.getClose());
                 stmt.setDouble(9, s.getAdjClose());
                 stmt.setInt(10, s.getVolume());
-                System.out.println("📦 Saving: " + s.getStockId() + " - " + s.getSymbol() + " on " + s.getDate());
+                System.out.println("Saving: " + s.getStockId() + " - " + s.getSymbol() + " on " + s.getDate());
 
                 stmt.addBatch(); // queue batch insert
             }
 
             stmt.executeBatch(); // run all at once
-            System.out.println("✅ Batch insert complete. Total records: " + stockDatasets.size());
+            System.out.println("Batch insert complete. Total records: " + stockDatasets.size());
             System.out.println("All stock data saved to DB");
 
         } catch (Exception e) {
