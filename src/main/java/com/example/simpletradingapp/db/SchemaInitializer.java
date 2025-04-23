@@ -22,11 +22,11 @@ public class SchemaInitializer {
             // Create Users table
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS Users (" +
-                            "user_id INT AUTO_INCREMENT PRIMARY KEY, " +
-                            "username VARCHAR(50) UNIQUE NOT NULL, " +
-                            "email VARCHAR(100) UNIQUE NOT NULL, " +
-                            "password_hash VARCHAR(255) NOT NULL, " +
-                            "balance DECIMAL(10,2) NOT NULL DEFAULT 100000.00" +
+                            "  user_id INT AUTO_INCREMENT PRIMARY KEY, " +
+                            "  username VARCHAR(50) UNIQUE NOT NULL, " +
+                            "  email VARCHAR(100) UNIQUE NOT NULL, " +
+                            "  password_hash VARCHAR(255) NOT NULL, " +
+                            "  balance DECIMAL(10,2) NOT NULL DEFAULT 100000.00" +
                             ")"
             );
             System.out.println("Users table created.");
@@ -59,19 +59,19 @@ public class SchemaInitializer {
             // Create User_Stock table (tracks user purchases)
             stmt.execute(
                     "CREATE TABLE IF NOT EXISTS User_Stock (" +
-                            "purchase_id INT AUTO_INCREMENT PRIMARY KEY, " +
-                            "user_id INT NOT NULL, " +
-                            "symbol VARCHAR(10) NOT NULL, " +
-                            "quantity INT NOT NULL, " +
-                            "avg_buy_price DECIMAL(10,2) NOT NULL, " +
-                            "total_value DECIMAL(10,2) NOT NULL, " +
-                            "purchase_date DATE NOT NULL, " +
-                            "FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE" +
+                            "  user_id INT NOT NULL, " +
+                            "  stock_id VARCHAR(10) NOT NULL, " +
+                            "  quantity INT NOT NULL, " +
+                            "  avg_buy_price DECIMAL(10,2) NOT NULL, " +
+                            "  total_value DECIMAL(10,2) NOT NULL, " +
+                            "  purchase_date DATE NOT NULL , " +
+                            "  FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE, " +
+                            "  FOREIGN KEY (stock_id) REFERENCES StockDataset(stockID) ON DELETE CASCADE" +
                             ")"
             );
             System.out.println("User_Stock table created.");
 
-            System.out.println("✅ Database schema setup complete!");
+            System.out.println("Database schema setup complete!");
 
         } catch (SQLException e) {
             System.err.println("Error setting up database: " + e.getMessage());
@@ -81,6 +81,6 @@ public class SchemaInitializer {
         }
     }
     public static void main(String[] args) {
-        initializeSchema();
+        initializeSchema(); // Run this to initialize DB schema
     }
 }

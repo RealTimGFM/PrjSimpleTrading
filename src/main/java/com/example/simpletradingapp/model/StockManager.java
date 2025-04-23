@@ -1,9 +1,16 @@
 package com.example.simpletradingapp.model;
 
+import com.example.simpletradingapp.db.DbUtil;
+
+import javax.xml.transform.Result;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,7 +92,6 @@ public class StockManager {
                 if (columns.length >= 7) {
                     try {
                         Date date = format.parse(columns[0].trim());
-
                         // Create a new StockDataset object for each line in CSV
                         StockDataset dataset = new StockDataset(
                                 date,
@@ -119,14 +125,14 @@ public class StockManager {
     }
 
     //Find stock by ID
-    public StockDataset getStockById(String id) {
-        for (StockDataset stock : stockDatasets) {
-            if (stock.getStockId().equals(id)) {
-                return stock;
-            }
-        }
-        return null;
-    }
+    //public StockDataset getStockById(String id) {
+        //for (StockDataset stock : stockDatasets) {
+            //if (stock.getStockId().equals(id)) {
+                //return stock;
+            //}
+        //}
+        //return null;
+    //}
     //find stocks by Category
     public List<StockDataset> getStocksByCategory(String categoryId) {
         List<StockDataset> result = new ArrayList<>();
@@ -137,6 +143,50 @@ public class StockManager {
             }
         }
         return result;
+    }
+    public void saveAllToDatabase() {
+
+        try (Connection conn = DbUtil.getConnection()) {
+
+            /*
+            PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM StockDataset");
+            ResultSet rs = checkStmt.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                System.out.println("⚠️ StockDataset table already has data. Skipping insert.");
+                return;
+            }
+            */
+            Statement clear = conn.createStatement();
+            clear.execute("DELETE FROM StockDataset");
+            System.out.println("Cleared StockDataset table before insert");
+
+            String insertSQL = "INSERT INTO StockDataset (stockID, symbol, name, date, open, high, low, close, adj_close, volume) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(insertSQL);
+
+            for (StockDataset s : stockDatasets) {
+                stmt.setString(1, s.getStockId());
+                stmt.setString(2, s.getSymbol());
+                stmt.setString(3, s.getName());
+                stmt.setDate(4, new java.sql.Date(s.getDate().getTime()));
+                stmt.setDouble(5, s.getOpen());
+                stmt.setDouble(6, s.getHigh());
+                stmt.setDouble(7, s.getLow());
+                stmt.setDouble(8, s.getClose());
+                stmt.setDouble(9, s.getAdjClose());
+                stmt.setInt(10, s.getVolume());
+                System.out.println("Saving: " + s.getStockId() + " - " + s.getSymbol() + " on " + s.getDate());
+
+                stmt.addBatch(); // queue batch insert
+            }
+
+            stmt.executeBatch(); // run all at once
+            System.out.println("Batch insert complete. Total records: " + stockDatasets.size());
+            System.out.println("All stock data saved to DB");
+
+        } catch (Exception e) {
+            System.err.println("Error saving stock data: " + e.getMessage());
+        }
     }
     
 }

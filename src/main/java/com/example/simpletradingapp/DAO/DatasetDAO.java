@@ -16,7 +16,7 @@ public interface DatasetDAO {
      * @param date in the stock code
      * @return the close stock (StockDataset) or null if not found
      */
-    List<StockDataset> findCloseByDate(Date date);
+    //List<StockDataset> findCloseByDate(Date date);
     /**
      * METHOD OVERLOAD
      * Find closed stock by date and by symbol

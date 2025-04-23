@@ -7,6 +7,8 @@ import java.util.*;
 public class StockDataset {
     ///FIELDS
     private String stockId;
+    private String symbol;
+    private String name;
     private Date date;
     private double open;
     private double high;
@@ -23,11 +25,13 @@ public class StockDataset {
     //constructor with fields
     public StockDataset(Date date, double open, double high, double low, double close, double adjClose, int volume, Category category) {
         this.stockId = createId();
+        this.symbol = category.getSymbol();
+        this.name = category.getName();
         this.date = date;
         this.high = high;
         this.low = low;
         this.close = close;
-        adj_close = adjClose;
+        this.adj_close = adjClose;
         this.open = open;
         this.volume = volume;
         this.category = category;
@@ -35,7 +39,7 @@ public class StockDataset {
 
     ///PROPERTIES : getters and setters
     public Date getDate() {return date;}
-//    public void setDate(Date date) {this.date = date;}
+    public void setDate(Date date) {this.date = date;}
 
     public double getHigh() {return high;}
     public void setHigh(double high) {this.high = high;}
@@ -85,7 +89,7 @@ public class StockDataset {
     public void updatePrice(double newPrice) {
         this.close = newPrice;
         this.date = new Timestamp(System.currentTimeMillis());
-        System.out.println("Stock " + getCategory()+ " price updated to $" + newPrice);
+        System.out.println("Stock " + getCategory().getSymbol()+ " price updated to $" + newPrice);
     }
 
     //display information about this class
@@ -94,4 +98,14 @@ public class StockDataset {
         return "CsvInfo{" + "Stock Id: "+ this.stockId + ", symbol: " + category.getSymbol() + ", name: " + category.getSymbol() + ", date: " + this.date + ", high: " + this.high + ", low: " + this.low + ", close: " + this.close;
     }
 
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 }

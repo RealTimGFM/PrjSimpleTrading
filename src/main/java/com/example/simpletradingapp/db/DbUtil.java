@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DbUtil {
     // JDBC URL for H2 database (file-based, stored in user home directory)
-    private static final String JDBC_URL = "jdbc:h2:./simpletradingapp;DB_CLOSE_DELAY=-1";
+    private static final String JDBC_URL = "jdbc:h2:file:C:/Users/TimGFM/IdeaProjects/SimpleTradingApp/simpletradingapp;DB_CLOSE_DELAY=-1";
     private static final String USER = "sa"; // Default H2 username
     private static final String PASSWORD = ""; // Default H2 password
 

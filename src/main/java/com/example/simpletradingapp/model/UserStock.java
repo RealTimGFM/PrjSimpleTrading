@@ -4,13 +4,13 @@ import java.sql.Date;
 
 public class UserStock {
     private int userId;
-    private int stockId;
+    private String stockId;
     private int quantity;
     private double avgBuyPrice;
     private double totalValue;
     private Date purchaseDate;
 
-    public UserStock(int userId, int stockId, int quantity, double avgBuyPrice, double totalValue, Date purchaseDate) {
+    public UserStock(int userId, String stockId, int quantity, double avgBuyPrice, double totalValue, Date purchaseDate) {
         this.userId = userId;
         this.stockId = stockId;
         this.quantity = quantity;
@@ -27,7 +27,7 @@ public class UserStock {
 
     // Getters and Setters
     public int getUserId() { return userId; }
-    public int getStockId() { return stockId; }
+    public String getStockId() { return stockId; }
     public int getQuantity() { return quantity; }
     public double getAvgBuyPrice() { return avgBuyPrice; }
     public double getTotalValue() { return totalValue; }
