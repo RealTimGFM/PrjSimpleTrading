@@ -109,4 +109,3 @@ public class StockDataset {
         this.name = name;
     }
 }
-

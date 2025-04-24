@@ -38,7 +38,7 @@ public class SchemaInitializer {
                     "CREATE TABLE IF NOT EXISTS StockDataset (" +
                             "stockID VARCHAR(10) PRIMARY KEY," +
                             "symbol VARCHAR(10), " +
-                            "name VARCHAR(100), " +
+                            "name VARCHAR(100)" +
                             "date DATE, " +
                             "open DOUBLE, " +
                             "high DOUBLE, " +
@@ -46,6 +46,7 @@ public class SchemaInitializer {
                             "close DOUBLE, " +
                             "adj_close DOUBLE, " +
                             "volume INT" +
+                            "FOREIGN KEY (symbol) REFERENCES StockInfo(symbol)" +
                             ")"
             );
             System.out.println("StockDataset table created.");
@@ -73,7 +74,6 @@ public class SchemaInitializer {
             );
             System.out.println("User_Stock table created.");
 
-
             System.out.println("Database schema setup complete!");
 
         } catch (SQLException e) {
@@ -84,6 +84,6 @@ public class SchemaInitializer {
         }
     }
     public static void main(String[] args) {
-        initializeSchema();
+        initializeSchema(); // Run this to initialize DB schema
     }
 }
