@@ -14,7 +14,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
-
+/**
+ * Displays a list of available stocks.
+ */
 @WebServlet("/company-list")
 public class CompanyListServlet extends HttpServlet {
 

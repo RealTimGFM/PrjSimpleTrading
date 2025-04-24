@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
+/**
+ * Creates a new user account and stores the hashed password securely.
+ */
 @WebServlet("/signup")
 public class SignupServlet extends HttpServlet {
     @Override

@@ -9,7 +9,9 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.sql.*;
 import java.util.*;
-
+/**
+ * Shows the logged-in user's portfolio including current holdings.
+ */
 @WebServlet("/portfolio")
 public class PortfolioServlet extends HttpServlet {
     @Override

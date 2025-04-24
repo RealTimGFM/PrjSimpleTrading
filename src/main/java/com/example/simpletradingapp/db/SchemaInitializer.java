@@ -5,7 +5,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class SchemaInitializer {
-
+    /**
+     * Create database and tables.
+     */
     public static void initializeSchema() {
         Connection conn = null;
         try {

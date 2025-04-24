@@ -55,7 +55,7 @@ public class DatasetDAOImpl implements DatasetDAO {
         try {
             conn = DbUtil.getConnection();
 
-            System.out.println("? SQL = SELECT * FROM StockDataset WHERE date <= " + date + " AND symbol = " + cat.getSymbol());
+            System.out.println("SQL = SELECT * FROM StockDataset WHERE date <= " + date + " AND symbol = " + cat.getSymbol());
 
             PreparedStatement stmt = conn.prepareStatement(
                     "SELECT * FROM StockDataset " +
@@ -75,19 +75,19 @@ public class DatasetDAOImpl implements DatasetDAO {
                 double adjClose = rs.getDouble("adj_close");
                 int volume = rs.getInt("volume");
 
-                System.out.println("? Executed. Has data? true ✅");
+                System.out.println("Executed. Has data? true");
                 String stockId = rs.getString("stockID"); // the actual one from the DB
                 StockDataset stock = new StockDataset(realDate, open, high, low, close, adjClose, volume, cat);
                 stock.setStockId(stockId); // ← THIS IS THE CRUCIAL LINE
                 return stock;
             } else {
-                System.out.println("? Executed. Has data? false ❌");
+                System.out.println("Executed. Has data? false");
             }
 
             return null;
 
         } catch (SQLException e) {
-            System.err.println("❌ Error finding close by date and symbol: " + e.getMessage());
+            System.err.println("Error finding close by date and symbol: " + e.getMessage());
             return null;
         } finally {
             DbUtil.closeQuietly(conn);

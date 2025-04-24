@@ -5,7 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
-
+/**
+ * Destroys the user session and redirects to the login page.
+ */
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
     @Override

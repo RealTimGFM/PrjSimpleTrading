@@ -12,7 +12,9 @@ import java.sql.Date;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
+/**
+ * Shows detailed view of a specific stock full info and history.
+ */
 @WebServlet("/stock-detail")
 public class StockDetailServlet extends HttpServlet {
 

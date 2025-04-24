@@ -19,7 +19,9 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
-
+/**
+ * Handles stock sell requests.
+ */
 @WebServlet("/sell-stock")
 public class SellStockServlet extends HttpServlet {
     @Override
@@ -53,7 +55,7 @@ public class SellStockServlet extends HttpServlet {
 
         try {
             conn = DbUtil.getConnection();
-            conn.setAutoCommit(false); // Begin transaction
+            conn.setAutoCommit(false);
 
             List<UserStock> holdings = stockHoldingsDao.getHoldingsByUser(userId);
             int totalOwned = 0;

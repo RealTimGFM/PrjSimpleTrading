@@ -16,7 +16,10 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 import java.sql.*;
-
+/**
+ * Handles stock purchase requests.
+ * Validates balance, inserts user stock, and updates balance in DB.
+ */
 @WebServlet("/buy-stock")
 public class BuyStockServlet extends HttpServlet {
     @Override
