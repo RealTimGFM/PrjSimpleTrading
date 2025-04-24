@@ -86,7 +86,7 @@ public class SellStockServlet extends HttpServlet {
                     stockHoldingsDao.deleteHolding(userId, h.getStockId(), purchaseDate);
                     remainingToSell -= lotQty;
                 } else {
-                    stockHoldingsDao.updateQuantity(userId, h.getStockId(), lotQty - remainingToSell);
+                    stockHoldingsDao.updateQuantity(conn, userId, h.getStockId(), lotQty - remainingToSell);
                     remainingToSell = 0;
                 }
             }

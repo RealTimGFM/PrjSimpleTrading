@@ -40,7 +40,6 @@ public class BuyStockServlet extends HttpServlet {
         Date fakeToday = DateManager.getFakeToday();
 
         DatasetDAOImpl stockDao = new DatasetDAOImpl();
-        UserDAOImpl userDao = new UserDAOImpl();
         UserStockDAOImpl stockHoldingsDao = new UserStockDAOImpl();
 
         StockDataset stock = stockDao.findCloseByDate(fakeToday, cat);
@@ -52,38 +51,50 @@ public class BuyStockServlet extends HttpServlet {
         double price = stock.getClose();
         double totalCost = price * qty;
 
-        Connection conn = null;
+        try (Connection conn = DbUtil.getConnection()) {
+            conn.setAutoCommit(false);  // start transaction
 
-        try {
-            conn = DbUtil.getConnection();
-            conn.setAutoCommit(false);
+            // 1. Get user's current balance
+            double balance = 0;
+            PreparedStatement getBal = conn.prepareStatement("SELECT balance FROM Users WHERE user_id = ?");
+            getBal.setInt(1, userId);
+            ResultSet rs = getBal.executeQuery();
+            if (rs.next()) {
+                balance = rs.getDouble("balance");
+            } else {
+                res.getWriter().println("User not found.");
+                return;
+            }
 
-            User user = userDao.getUserById(userId);
-            if (user.getBalance() < totalCost) {
+            if (balance < totalCost) {
                 res.getWriter().println("Not enough balance.");
                 return;
             }
 
-            userDao.updateBalance(userId, user.getBalance() - totalCost);
+            // 2. Deduct balance
+            PreparedStatement updateBal = conn.prepareStatement(
+                    "UPDATE Users SET balance = balance - ? WHERE user_id = ?"
+            );
+            updateBal.setDouble(1, totalCost);
+            updateBal.setInt(2, userId);
+            updateBal.executeUpdate();
 
+            // 3. Insert stock using DAO (with shared connection!)
             UserStock holding = new UserStock(userId, stock.getStockId(), qty, price, totalCost, new java.sql.Date(fakeToday.getTime()));
-            stockHoldingsDao.insertHolding(holding);
+            boolean inserted = stockHoldingsDao.insertHolding(conn, holding);
 
-            conn.commit();
+            if (!inserted) {
+                conn.rollback();
+                res.getWriter().println("Failed to save purchase. Rolled back.");
+                return;
+            }
+
+            conn.commit();  // commit everything
             res.sendRedirect("company-list");
 
         } catch (Exception e) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException ex) {
-                    System.err.println("Rollback error: " + ex.getMessage());
-                }
-            }
             e.printStackTrace();
             res.getWriter().println("Error during purchase.");
-        } finally {
-            DbUtil.closeQuietly(conn);
         }
     }
 }

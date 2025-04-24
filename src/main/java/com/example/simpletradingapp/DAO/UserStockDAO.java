@@ -2,6 +2,7 @@ package com.example.simpletradingapp.DAO;
 
 import com.example.simpletradingapp.model.UserStock;
 
+import java.sql.Connection;
 import java.util.List;
 
 public interface UserStockDAO {
@@ -20,7 +21,8 @@ public interface UserStockDAO {
      * @param newQty the new quantity to set
      * @return true if updated successfully, false otherwise
      */
-    boolean updateQuantity(int userId, String stockId, int newQty);
+    boolean updateQuantity(Connection conn, int userId, String stockId, int newQty);
+
     /**
      * Insert a new stock holding for the user.
      *
